@@ -7,6 +7,12 @@ void ScModel::addStateMachine(const ScName &name, const ScName &initialState)
     if ( !m_states.contains(name) ) {
         addState(name, RootScName, 0, {initialState});
     }
+    else
+    {
+        m_states[name].parent = RootScName;
+        m_states[name].substates[0].initial = initialState;
+        addSubstate(RootScName, name, 0);
+    }
 }
 
 void ScModel::addState(const ScName &name, const ScName &parent, int orthRegion, const ScNameList &initialSubstates)
