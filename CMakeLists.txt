@@ -49,6 +49,8 @@ target_compile_features(bosce
     cxx_std_14 # enforce C++14
 )
 
+target_include_directories(bosce BEFORE PRIVATE ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
+
 target_link_libraries(bosce
   PUBLIC
     Qt5::Core
