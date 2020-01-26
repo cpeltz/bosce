@@ -15,11 +15,12 @@
 #include "PlantUmlGenerator.h"
 
 #include <QProcess>
-#include <QFile>
 
 
 #include <boost/program_options.hpp>
 
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <memory>
 
@@ -145,8 +146,8 @@ int main(int argc, char *argv[])
 
     if ( settings.isUseObjdump ) {
         /* Use a pre-generated objdump file */
-        QFile file(QString::fromStdString(settings.inputFile));
-        if ( !file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
+        std::ifstream file(std::path(settings.inputFile));
+        if ( !file.is_open() ) {
             std::cerr << "Cannot open an input file\n" << std::endl;
             return -1;
         }

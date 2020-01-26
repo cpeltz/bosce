@@ -6,7 +6,7 @@
 ##                      http://www.boost.org/LICENSE_1_0.txt)
 ##
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.12)
 project(bosce CXX)
 
 find_package(Qt5 REQUIRED COMPONENTS Core CONFIG)
@@ -46,10 +46,10 @@ add_executable(bosce
 
 target_compile_features(bosce
   PUBLIC
-    cxx_std_14 # enforce C++14
+    cxx_std_17 # enforce C++17
 )
 
-target_include_directories(bosce BEFORE PRIVATE ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
+target_include_directories(bosce SYSTEM BEFORE PRIVATE ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
 target_link_libraries(bosce
   PUBLIC
