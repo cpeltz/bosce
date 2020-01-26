@@ -11,6 +11,9 @@ public:
     void parseFunctionDecl(char *&data);
     void parseFunctionCall(char *&data);
 
+    void parseFunctionDecl(const std::string &data);
+    void parseFunctionCall(const std::string &data);
+
 private:
     void parseStateMachine(char *&data);
     void parseSimpleState(char *&data);

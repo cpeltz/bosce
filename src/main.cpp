@@ -155,27 +155,27 @@ int main(int argc, char *argv[])
 
     } else {
         /* Generate an objfile on the fly. */
-        QProcess process;
+        // QProcess process;
 
-        if ( settings.isExtractObjdump ) {
-            process.setProcessChannelMode(QProcess::ForwardedChannels);
-        } else {
-            process.setProcessChannelMode(QProcess::ForwardedErrorChannel);
-        }
+        // if ( settings.isExtractObjdump ) {
+        //     process.setProcessChannelMode(QProcess::ForwardedChannels);
+        // } else {
+        //     process.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+        // }
 
-        process.start("objdump", {"-j", ".text", "-C", "-d",
-                                  QString::fromStdString(settings.inputFile)});
-        process.waitForFinished(-1);
+        // process.start("objdump", {"-j", ".text", "-C", "-d",
+        //                           QString::fromStdString(settings.inputFile)});
+        // process.waitForFinished(-1);
 
-        if ( (process.exitStatus() != QProcess::NormalExit) || process.exitCode() ) {
-            std::cerr << "Cannot generate an objdump\n" << std::endl;
-        }
+        // if ( (process.exitStatus() != QProcess::NormalExit) || process.exitCode() ) {
+        //     std::cerr << "Cannot generate an objdump\n" << std::endl;
+        // }
 
-        if ( !settings.isExtractObjdump ) {
-            objDumpParser.parse(process);
-        } else {
-            return 0;
-        }
+        // if ( !settings.isExtractObjdump ) {
+        //     objDumpParser.parse(process);
+        // } else {
+        //     return 0;
+        // }
     }
 
     // Generation:

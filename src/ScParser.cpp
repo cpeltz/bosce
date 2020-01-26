@@ -2,6 +2,7 @@
 #include "ScModel.h"
 #include "ParserHelpers.h"
 
+#include <regex>
 #include <iostream>
 
 ScParser::ScParser(ScModel &model)
@@ -107,6 +108,58 @@ void ScParser::parseFunctionCall(char *&data)
         } else if ( expectStartsWith(data, "::discard_event()") ) {
             m_model.addTransition(m_currentState, m_currentEvent);
         } else if ( expectStartsWith(data, "::defer_event()") ) {
+            m_model.addDeferral(m_currentEvent);
+        }
+    }
+}
+
+void parseFunctionDecl(const std::string &data)
+{
+    static const std::regex expr("^boost::statechart::(|detail::reaction_result boost::statechart::)(state_machine|simple_state)<(.*)");
+    m_hasCurrentState = false;
+    std::smatch match;
+    if( std::regex_match(data, match, expr) ) {
+        if( "state_machine" == match.str(2) ) {
+            // state_machine
+        } else {
+            // simple_state
+        }
+    } else {
+        // React Method
+    }
+
+}
+
+std::string matchAngleArgument(const std::string& data)
+{
+    uint32_t angles = 1;
+    for(std::string::const_iterator pos = data.begin(); pos != data.end(); ++pos) {
+        if( '<' == *pos )
+            ++angles;
+        else if( '>' == *pos )
+            --angles;
+
+        if(angles == 0)
+            return std::string(data.begin(), pos);
+    }
+    return std::string();
+}
+
+void parseFunctionCall(const std::string &data)
+{
+    static const std::regex expr("(|boost::statechart::detail::safe_reaction_result )boost::statechart::simple_state<.*::(transit<|discard_event\(\)|defer_event\(\))(.*)");
+
+    if ( !m_hasCurrentState ) {
+        return;
+    }
+    std::smatch match;
+    if( std::regex_match(data, match, expr) ) {
+        if( "transit<" == match.str(2) ) {
+            QByteArray target = matchAngleArgument(match.str(3)).c_str();
+            m_model.addTransition(target, m_currentEvent);
+        } else if( "discard_event()" == match.str(2) ) {
+            m_model.addTransition(m_currentState, m_currentEvent);
+        } else if( "defer_event()" == match.str(2) ) {
             m_model.addDeferral(m_currentEvent);
         }
     }
